@@ -4,13 +4,15 @@ import { initializeMovies } from "../reducers/moviesReducer";
 import EntryItem from "../components/body/EntryItem";
 import BodyContainer from "../components/BodyContainer";
 import Modal from "../components/body/Modal";
+import Filter from "../components/body/Filter";
 
 const MoviesView = () => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [year, setYear] = useState("any");
 
-  const movies = useSelector((state) => state.movies);
+  const movies = useSelector(({ movies }) => movies.movies);
 
   const itemPressed = (item) => {
     setSelectedItem(item);
@@ -18,8 +20,8 @@ const MoviesView = () => {
   };
 
   useEffect(() => {
-    dispatch(initializeMovies());
-  }, []);
+    dispatch(initializeMovies(year));
+  }, [year]);
 
   return (
     <BodyContainer title={"Movies"}>
@@ -34,11 +36,14 @@ const MoviesView = () => {
       {movies.error ? (
         <p className="text-center text-2xl">Oops... Something went wrong!</p>
       ) : (
-        <ul className="flex flex-row flex-wrap gap-4 justify-evenly items-start">
-          {movies.map((movie) => (
-            <EntryItem key={movie.title} item={movie} onClick={itemPressed} />
-          ))}
-        </ul>
+        <>
+          <Filter setYear={setYear} page={"movies"} />
+          <ul className="flex flex-row flex-wrap gap-4 justify-evenly items-start">
+            {movies.map((movie) => (
+              <EntryItem key={movie.title} item={movie} onClick={itemPressed} />
+            ))}
+          </ul>
+        </>
       )}
     </BodyContainer>
   );

@@ -1,21 +1,42 @@
-export const getMovies = () => {
-  return fetch("./sample.json")
-    .then(async (response) => {
-      //! Simula los tiempos de carga
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      return response.json();
-    })
-    .then((data) => {
-      return data.entries
-        .filter(
-          (entry) => entry.programType === "movie" && entry.releaseYear >= 2010
-        )
-        .sort((a, b) => a.title.localeCompare(b.title))
-        .slice(0, 20);
-    })
-    .catch((error) => {
-      return { error: "Oops... Something went wrong!" };
-    });
+const getMovies = async (year) => {
+  try {
+    const response = await fetch("./sample.json");
+
+    //! Simula los tiempos de carga
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    const data = await response.json();
+
+    return data.entries
+      .filter(
+        (entry) =>
+          entry.programType === "movie" &&
+          (year === "any"
+            ? entry.releaseYear >= 2010
+            : entry.releaseYear == year)
+      )
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .slice(0, 20);
+  } catch (error) {
+    return { error: "Oops... Something went wrong!" };
+  }
 };
 
-export default { getMovies };
+const getYears = async () => {
+  try {
+    const response = await fetch("./sample.json");
+
+    const data = await response.json();
+    return Array.from(
+      new Set(
+        data.entries
+          .filter((entry) => entry.programType === "movie")
+          .map((entry) => entry.releaseYear)
+      )
+    ).sort((a, b) => a - b);
+  } catch (error) {
+    return { error: "Oops... Something went wrong!" };
+  }
+};
+
+export default { getMovies, getYears };

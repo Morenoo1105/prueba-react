@@ -3,20 +3,34 @@ import moviesService from "../services/movies";
 
 const moviesSlice = createSlice({
   name: "movies",
-  initialState: [],
+  initialState: {
+    movies: [],
+    years: [],
+  },
   reducers: {
     setMovies(state, action) {
-      return action.payload;
+      return { movies: action.payload, years: state.years };
+    },
+    setYears(state, action) {
+      return { movies: state.movies, years: action.payload };
     },
   },
 });
 
-export const { setMovies } = moviesSlice.actions;
+export const { setMovies, setYears } = moviesSlice.actions;
 
-export const initializeMovies = () => {
+export const initializeMovies = (year) => {
   return async (dispatch) => {
-    const movies = await moviesService.getMovies();
+    const movies = await moviesService.getMovies(year);
     dispatch(setMovies(movies));
+  };
+};
+
+export const initializeYears = () => {
+  return async (dispatch) => {
+    const years = await moviesService.getYears();
+
+    dispatch(setYears(years));
   };
 };
 
