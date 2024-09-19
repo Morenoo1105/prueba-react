@@ -7,7 +7,7 @@ import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <>
+    <main className="flex flex-col min-h-screen">
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -15,7 +15,7 @@ function App() {
         <Route path="/movies" element={<MoviesView />} />
       </Routes>
       <Footer />
-    </>
+    </main>
   );
 }
 

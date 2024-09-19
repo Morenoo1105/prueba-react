@@ -5,7 +5,7 @@ const BodyContainer = ({ title, children }) => {
   return (
     <>
       <TitleBar title={title} />
-      <section className="py-10 container mx-auto min-h-full">
+      <section className="py-10 flex-1 container mx-auto">
         {children}
       </section>
     </>
